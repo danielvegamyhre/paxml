@@ -58,7 +58,7 @@ def _maybe_update_latest_model_step(
   if not hasattr(train_input_p, 'deterministic_input_start_index'):
     # Not deterministic seqio.
     return
-  logging.info('step used for deterministic seqio: %d', initial_global_step)
+  logging.info(f'step used for deterministic seqio: {initial_global_step}')
   if initial_global_step is None:
     if task_p.train.external_checkpoint_path:
       logging.warning(
@@ -293,7 +293,7 @@ class DefaultExecutor(base_executor.BaseExecutor):
       jax.random.KeyArray,
       Sequence[str],
   ]:
-    use_pmap = self._task.hparams.model.ici_mesh_shape is None
+    use_pmap = self._task.model.ici_mesh_shape is None
 
     assert decode_input_ps, 'decode_input_p must not be empty'
 
@@ -347,7 +347,7 @@ class DefaultExecutor(base_executor.BaseExecutor):
     return decode_once_fn, prng_key, decode_input_names
 
   def start(self):
-    is_vars_replicated = self._task.hparams.model.ici_mesh_shape is None
+    is_vars_replicated = self._task.model.ici_mesh_shape is None
     _train_and_evaluate_common(
         self._task,
         self._partitioner,
